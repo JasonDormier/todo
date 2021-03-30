@@ -1,0 +1,109 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding:0;
+    width: 100%;
+}
+.todo-details {
+    display:flex;
+    flex-direction:column;
+
+    header {
+        display:flex;
+        flex-direction:row;
+        justify-content:space-between;
+        padding:.5em 1em;
+    }
+
+    .item {
+        flex:1;
+        padding: 1em;
+    }
+
+}
+h2{
+    font-size: 2em;
+    background-color: rgb(61, 61, 61);
+    color: rgb(245, 245, 245);
+    padding: 10px;
+    width: 95%;
+}
+
+.todo {
+
+    display:flex;
+    flex-direction:row;
+    justify-content: flex-start;
+    margin: 2em;
+
+    form {
+
+        display:flex;
+        flex-direction:column;
+        margin-right: 2em;
+        border: .7px solid #e7e7e7;
+        padding: 20px;
+
+        label {
+            display: flex;
+            flex-direction:column;
+            margin-bottom: 1em;
+        }
+    }
+
+    ul {
+        font-size: 1.2em;
+        font-weight: bold;
+        box-sizing: border-box;
+        list-style-type:none;
+        margin:0;
+        padding:0;
+
+        li {
+
+            align-items: center;
+            display:flex;
+            flex-direction:row;
+            font-size: .75em;
+            //margin: .75em .5em;
+            padding:0;
+
+            &.complete-true {
+              span {
+                background: pink;
+                text-decoration:line-through;
+                &:hover {
+                   background: seagreen;
+                }
+              }
+            }
+
+            span {
+                color:rgb(30, 70, 12) ;
+                background: #B1DFBB;
+                cursor:pointer;
+                &:hover {
+                    background: pink;
+                }
+            }
+             span, input {
+                 border: .5px solid rgb(62, 136, 28);
+                 display:inline-block;
+                 padding: .8em .8em;
+                 width: 500px;
+                 height: 50px;
+             }
+
+            button {
+                background: transparent;
+                border:none;
+                color:blue;
+                cursor:pointer;
+                padding:0;
+                margin: 0 .75em;
+            }
+
+        }
+    }
+
+}
