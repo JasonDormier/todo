@@ -1,21 +1,36 @@
 import React from 'react';
-import ListGroup from 'react-bootstrap/ListGroup';
+import Toast from "react-bootstrap/Toast";
+import Badge from "react-bootstrap/Badge";
 
 export default function toDoList(props) {
 
-  return (
-    <ListGroup as="ul">
-      {props.list.map(item => (
-        <ListGroup.Item as="li"
-          className={`complete-${item.complete.toString()}`}
-          key={item._id}
-        >
-          <span onClick={() => props.handleComplete(item._id)}>
-            {item.text}
-          </span>
-        </ListGroup.Item>
-      ))}
-    </ListGroup>
-  );
+  const styles = {
+    pill: {
+      cursor: "pointer",
+    },
+  };
 
+  return (
+    <>
+      {props.list.map((item) => (
+        <Toast key={item._id} onClose={() => props.handleDelete(item._id)}>
+          <Toast.Header>
+            <Badge
+              pill
+              style={styles.pill}
+              variant={item.complete ? "danger" : "success"}
+              onClick={() => props.handleComplete(item._id)}
+            >
+              {!item.complete ? "Pending" : "Complete"}
+            </Badge>
+            <strong className="mr-auto">{item.assignee}</strong>
+          </Toast.Header>
+          <Toast.Body>
+            {item.text}
+                difficulty:{item.difficulty}
+          </Toast.Body>
+        </Toast>
+      ))}
+    </>
+  )
 }
