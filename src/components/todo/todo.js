@@ -2,9 +2,12 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import TodoForm from './form.js';
 import TodoList from './list.js';
+import axios from 'axios';
 
 
 import './todo.scss';
+
+const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
 
 export default function ToDo() {
 
@@ -12,38 +15,67 @@ export default function ToDo() {
 
   document.title = `Items left ${list.filter(item => !item.complete).length}`;
 
+  const getItem = async () => {
+    try {
+      let request = await axios({
+        method: 'get',
+        url: todoAPI
+      });
 
-  const addItem = (item) => {
-    item._id = Math.random();
-    item.complete = false;
-    setList([...list, item]);
-  };
-
-  const toggleComplete = id => {
-
-    let item = list.filter(i => i._id === id)[0] || {};
-
-    if (item._id) {
-      item.complete = !item.complete;
-      setList(list.map(listItem => listItem._id === item._id ? item : listItem));
-
-      //setList({ list });
+      let todos = request.data.results;
+      setList(todos);
     }
+    catch (e) {
+      console.warn(e.message)
+    };
   };
 
-  const _toDoItems = () => {
-    let list2 = [
-      { _id: 1, complete: false, text: 'Clean the Kitchen', difficulty: 3, assignee: 'Person A' },
-      { _id: 2, complete: false, text: 'Do the Laundry', difficulty: 2, assignee: 'Person A' },
-      { _id: 3, complete: false, text: 'Walk the Dog', difficulty: 4, assignee: 'Person B' },
-      { _id: 4, complete: true, text: 'Do Homework', difficulty: 3, assignee: 'Person C' },
-      { _id: 5, complete: false, text: 'Take a Nap', difficulty: 1, assignee: 'Person B' },
-    ];
+  useEffect(() => {
+    getItem();
+  }, []);
 
-    setList(list2);
+  const postItem = async (input) => {
+    try {
+      let request = await axios({
+        method: 'post',
+        url: todoAPI,
+        data: input,
+      });
+      getItem();
+      return request;
+    }
+    catch (e) {
+      console.warn(e.message)
+    };
+  };
+
+  const putItem = async (id) => {
+    let newValue = list.filter((list) => list._id === id)[0];
+
+    if (newValue._id) {
+
+      newValue.complete = !newValue.complete;
+      let toggle = newValue.complete;
+
+      let request = await axios({
+        method: 'put',
+        url: `${todoAPI}/${id}`,
+        data: { complete: toggle }
+      })
+      getItem();
+      return request;
+    };
+  };
+
+  const deleteItem = async (id) => {
+    let request = await axios({
+      method: 'delete',
+      url: `${todoAPI}/${id}`,
+    })
+    getItem();
+    return request;
   }
 
-  useEffect(_toDoItems, []);
 
   return (
     <>
@@ -54,17 +86,17 @@ export default function ToDo() {
           </h2>
         </header>
 
-
         <section className="todo">
 
           <div>
-            <TodoForm handleSubmit={addItem} />
+            <TodoForm addItem={postItem} />
           </div>
 
           <div >
             <TodoList className="item"
               list={list}
-              handleComplete={toggleComplete}
+              handleComplete={putItem}
+              handleDelete={deleteItem}
             />
           </div>
         </section>

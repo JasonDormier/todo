@@ -1,24 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-//import Form from 'react-jsonschema-form';
 import { Button, Form, ListGroup } from 'react-bootstrap';
+import useForm from '../../hooks/useForm.js';
 
+export default function TodoForm({ addItem }) {
 
-export default function TodoForm(props) {
-
-  const [listItem, setListItem] = useState([]);
-
-  const handleInputChange = e => {
-    setListItem({ item: { ...listItem.item, [e.target.name]: e.target.value } });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    e.target.reset();
-    props.handleSubmit(listItem.item);
-    const item = {};
-    setListItem({ item });
-  };
+  let [values, handleChange, handleSubmit] = useForm(addItem);
 
   return (
     <>
@@ -30,16 +17,16 @@ export default function TodoForm(props) {
             <Form.Control
               name="text"
               placeholder="Add To Do List Item"
-              onChange={handleInputChange}
+              onChange={handleChange}
             />
           </Form.Label>
           <Form.Label>
-            {/* <span>Difficulty Rating</span> */}
-            <Form.Control defaultValue="1" type="range" min="1" max="5" name="difficulty" onChange={handleInputChange} />
+            <span>Difficulty Rating</span>
+            <Form.Control defaultValue="1" type="range" min="1" max="5" name="difficulty" onChange={handleChange} />
           </Form.Label>
           <Form.Label>
             <span>Assigned To</span>
-            <Form.Control type="text" name="assignee" placeholder="Assigned To" onChange={handleInputChange} />
+            <Form.Control type="text" name="assignee" placeholder="Assigned To" onChange={handleChange} />
           </Form.Label>
         </Form.Group>
         <Button variant="primary" type="submit" >Add Item</Button>
