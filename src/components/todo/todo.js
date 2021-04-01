@@ -4,16 +4,28 @@ import TodoForm from './form.js';
 import TodoList from './list.js';
 import axios from 'axios';
 
+import useAjax from '../../hooks/ajax.js'
+
 
 import './todo.scss';
 
 const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
 
 export default function ToDo() {
-
+  const [request, response] = useAjax();
   const [list, setList] = useState([]);
+  const [data, setData] = useState();
 
   document.title = `Items left ${list.filter(item => !item.complete).length}`;
+
+  // useEffect(() => {
+  //   request({ 'https://api-js401.herokuapp.com/api/v1/todo' });
+  // }, [request]);
+
+  useEffect(() => {
+    setData(response);
+  }, [response]);
+
 
   const getItem = async () => {
     try {
@@ -30,14 +42,12 @@ export default function ToDo() {
     };
   };
 
-  useEffect(() => {
-    getItem();
-  }, []);
-
   const postItem = async (input) => {
     try {
       let request = await axios({
         method: 'post',
+        mode: 'cors',
+        headers: { 'Content': 'application/json' },
         url: todoAPI,
         data: input,
       });
@@ -54,13 +64,12 @@ export default function ToDo() {
 
     if (newValue._id) {
 
-      newValue.complete = !newValue.complete;
-      let toggle = newValue.complete;
-
       let request = await axios({
         method: 'put',
+        mode: 'cors',
+        headers: { 'Content': 'application/json' },
         url: `${todoAPI}/${id}`,
-        data: { complete: toggle }
+        data: { complete: !newValue.complete }
       })
       getItem();
       return request;
@@ -70,12 +79,17 @@ export default function ToDo() {
   const deleteItem = async (id) => {
     let request = await axios({
       method: 'delete',
+      mode: 'cors',
+      headers: { 'Content': 'application/json' },
       url: `${todoAPI}/${id}`,
     })
     getItem();
     return request;
   }
 
+  useEffect(() => {
+    getItem();
+  }, [putItem, deleteItem]);
 
   return (
     <>
