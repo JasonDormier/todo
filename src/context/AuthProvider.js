@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import jwt from 'jsonwebtoken';
-import useAjax from '../hooks/useAjax.js';
+import useAjax from '../hooks/ajax.js';
 import cookie from 'react-cookies';
 
 export const AuthContext = React.createContext();

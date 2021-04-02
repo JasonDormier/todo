@@ -6,6 +6,11 @@ import Header from '../header/header.js';
 import axios from 'axios';
 
 import useAjax from '../../hooks/ajax.js'
+import Auth from '../../components/auth/auth.js';
+import AuthProvider from '../../context/AuthProvider.js';
+import { useContext } from 'react';
+import { AuthContext } from '../../context/AuthProvider.js';
+import useForm from '../../hooks/useForm.js';
 
 
 import './todo.scss';
@@ -14,9 +19,9 @@ const todoAPI = 'https://api-js401.herokuapp.com/api/v1/todo';
 
 export default function ToDo() {
   const [request, response] = useAjax();
-  const [list, setList] = useState([]);
   const [data, setData] = useState();
 
+  const [list, setList] = useState([]);
   document.title = `Items left ${list.filter(item => !item.complete).length}`;
 
   // useEffect(() => {
@@ -94,29 +99,33 @@ export default function ToDo() {
 
   return (
     <>
-      <Header />
-      <main className="todo-details">
-        <header>
-          <h2>
-            To Do List Manager ({list.filter(item => !item.complete).length})
+      <AuthProvider>
+        <Header />
+        <Auth capability="read">
+          <main className="todo-details">
+            <header>
+              <h2>
+                To Do List Manager ({list.filter(item => !item.complete).length})
           </h2>
-        </header>
+            </header>
 
-        <section className="todo">
+            <section className="todo">
 
-          <div>
-            <TodoForm addItem={postItem} />
-          </div>
+              <div>
+                <TodoForm addItem={postItem} />
+              </div>
 
-          <div >
-            <TodoList className="item"
-              list={list}
-              handleComplete={putItem}
-              handleDelete={deleteItem}
-            />
-          </div>
-        </section>
-      </main>
+              <div >
+                <TodoList className="item"
+                  list={list}
+                  handleComplete={putItem}
+                  handleDelete={deleteItem}
+                />
+              </div>
+            </section>
+          </main>
+        </Auth>
+      </AuthProvider>
     </>
   );
 }
