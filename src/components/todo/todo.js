@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import TodoForm from './form.js';
 import TodoList from './list.js';
+import Header from '../header/header.js';
 import axios from 'axios';
 
 import useAjax from '../../hooks/ajax.js'
@@ -93,6 +94,7 @@ export default function ToDo() {
 
   return (
     <>
+      <Header />
       <main className="todo-details">
         <header>
           <h2>

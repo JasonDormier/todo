@@ -5,7 +5,7 @@ class Settings extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            maxVisible: 3,
+            maxVisible: 5,
             showCompleted: true,
         };
     };
